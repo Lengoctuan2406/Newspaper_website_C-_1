@@ -1,0 +1,125 @@
+﻿@model Blogcongnghe.Models.StoreContext
+@if (Model.Laythanhvien().EMAIL == null)
+{
+    Layout = "~/Views/Shared/_Layoutuser-trang.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layoutuser-" + Model.Laythanhvien().MAUNEN + ".cshtml";
+}
+<header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/Index/Index">Phoenix Blog<span>.</span></a></h1>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="/Index/Index">Trang chủ</a></li>
+                <li class="dropdown">
+                    <a href="#"><span>Thể Loại</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        @foreach (var theloai in Model.Laytheloai())
+                        {
+                            <li><a href="/TheloaiBaiviet/Index/?MATL=@theloai.MATL">@theloai.TENTL</a></li>
+                        }
+                    </ul>
+                </li>
+                <li><a class="nav-link scrollto" href="/ThongtinDoanhnghiep/Index">Giới thiệu</a></li>
+                @if (Model.Laythanhvien().EMAIL == null)
+                {
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Index">Đăng nhập</a></li>
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Dangki">Đăng kí</a></li>
+                }
+                else
+                {
+                    if (Model.Laythanhvien().QUYENDN == 1 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto" href="/Admin/IndexAdmin/Index?MATV=@Model.Laythanhvien().MATV">Chào Quản Trị Viên</a></li>
+                    }
+                    else if (Model.Laythanhvien().QUYENDN == 0 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto active" href="/ThongtinThanhvien/Index">Chào @Model.Laythanhvien().TENTHANHVIEN</a></li>
+                    }
+                }
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+<main id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <aside id="sidebar" class="sidebar">
+                    <ul class="sidebar-nav" id="sidebar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/ThongtinThanhvien/Index">
+                                <i class="bi bi-person"></i>
+                                <span>Thông tin cá nhân</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="/ThongtinBaivietThanhvien/Index">
+                                <i class="bi bi-card-list"></i>
+                                <span>Bài viết hiện có</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="/ThongtinTaobaivietThanhvien/Index">
+                                <i class="bi bi-card-list"></i>
+                                <span>Tạo bài viết mới</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="/ThongtinBaivietThanhvien/Dangxuat">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                <span>Đăng xuất</span>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="col-lg-9">
+                <section id="portfolio-details" class="portfolio-details">
+                    <div class="container pt-10">
+                        @{
+                            var item = Model.LaydulieuBaivietchitiet1;
+                        }
+                        <div class="portfolio-details-slider swiper">
+                            <div class="swiper-wrapper align-items-center">
+                                <div class="swiper-slide">
+                                    <img src="~/img_post/@item.GetType().GetProperty("ANH1").GetValue(item, null)" alt="">
+                                </div>
+
+                                <div class="swiper-slide">
+                                    <img src="~/img_post/@item.GetType().GetProperty("ANH2").GetValue(item, null)" alt="">
+                                </div>
+
+                                <div class="swiper-slide">
+                                    <img src="~/img_post/@item.GetType().GetProperty("ANH3").GetValue(item, null)" alt="">
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                        <div class="portfolio-description">
+                            <h2>@item.GetType().GetProperty("TIEUDE").GetValue(item, null)</h2>
+                            @{
+                                string str = item.GetType().GetProperty("NOIDUNG").GetValue(item, null).ToString();
+                                string[] arrListStr = str.Split(";");
+                            }
+                            @for (int i = 0; i < arrListStr.Length; i++)
+                            {
+                                if (arrListStr[i].Length <= 70)
+                                {
+                                    <h3>@arrListStr[i]</h3>
+                                }
+                                else
+                                {
+                                    <p>@arrListStr[i]</p>
+                                }
+                            }
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

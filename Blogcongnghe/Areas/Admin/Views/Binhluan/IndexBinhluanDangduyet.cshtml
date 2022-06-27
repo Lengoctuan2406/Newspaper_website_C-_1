@@ -1,0 +1,179 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layoutadmin.cshtml";
+}
+@model Blogcongnghe.Areas.Admin.Models.StoreContext
+<header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div>
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle " href="#">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li>
+            <li class="nav-item dropdown pe-3">
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img src="~/img_add/@Model.Layquantrivien().ANHDD" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2">@Model.Layquantrivien().TENTHANHVIEN</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>@Model.Layquantrivien().TENTHANHVIEN</h6>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <i class="bi bi-person"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="/Index/Index">
+                            <i class="bi bi-person"></i>
+                            <span>Trang chủ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="/Admin/IndexAdmin/Dangxuat">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+<aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/Admin/IndexAdmin/Index">
+                <i class="bi bi-grid"></i>
+                <span>Tổng quát</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/Admin/Taobaiviet/Index">
+                <i class="bi bi-layout-text-window-reverse"></i>
+                <span>Tạo bài viết</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Bài viết</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="/Admin/BaivietAdmin/IndexBaivietDangduyet">
+                        <i class="bi bi-circle"></i><span>Đang duyệt</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/BaivietAdmin/IndexBaivietTuchoi">
+                        <i class="bi bi-circle"></i><span>Từ chối</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/BaivietAdmin/IndexBaivietChapnhan">
+                        <i class="bi bi-circle"></i><span>Đã duyệt</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-target="#tables-nav1" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Bình luận</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav1" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="/Admin/Binhluan/IndexBinhluanDangduyet">
+                        <i class="bi bi-circle"></i><span>Đang duyệt</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Binhluan/IndexBinhluanChapnhan">
+                        <i class="bi bi-circle"></i><span>Đã duyệt</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav2" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-person"></i><span>Thành viên</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav2" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="/Admin/Thanhvien/Index">
+                        <i class="bi bi-circle"></i><span>Tất cả</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Thanhvien/IndexTinnhan">
+                        <i class="bi bi-circle"></i><span>Tin nhắn</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+<main id="main" class="main">
+    <div class="card">
+        <div class="card-body" style="padding:20px;">
+            <form action="/Admin/Binhluan/DuyetBinhluan" method="post">
+                <div class="row mb-3">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Lọc bình luận</label>
+                    <div class="col-sm-10">
+                        <input type="hidden" name="MADUYET" value="@Model.Layxulybinhluan().MADUYET" />
+                        <textarea name="TENDUYET" class="form-control" style="height: 100px">@Model.Layxulybinhluan().TENDUYET</textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Duyệt bình luận</button>
+            </form>
+        </div>
+    </div>
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Các bình luận đang duyệt</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên thành viên</th>
+                                    <th scope="col">Nội dung bình luận</th>
+                                    <th scope="col">Ngày bình luận</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col" colspan="2" style="text-align: center;">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var binhluandangduyet in Model.Laybinhluandangduyet())
+                                {
+                                    <tr>
+                                        <th scope="row">@binhluandangduyet.GetType().GetProperty("TENTHANHVIEN").GetValue(binhluandangduyet, null)</th>
+                                        <td style="width:350px">@binhluandangduyet.GetType().GetProperty("NOIDUNG").GetValue(binhluandangduyet, null)</td>
+                                        <td>@binhluandangduyet.GetType().GetProperty("NGAYBINHLUAN").GetValue(binhluandangduyet, null)</td>
+                                        <td><span class="badge bg-warning">Đang duyệt</span></td>
+                                        <td><a href="/Admin/Binhluan/ChapnhanBinhluan?MABL=@binhluandangduyet.GetType().GetProperty("MABL").GetValue(binhluandangduyet, null)" class="btn btn-primary">Chấp nhận</a></td>
+                                        <td><a href="/Admin/Binhluan/XoaBinhluan?MABL=@binhluandangduyet.GetType().GetProperty("MABL").GetValue(binhluandangduyet, null)" class="btn btn-danger">Xóa</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

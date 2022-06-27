@@ -1,0 +1,170 @@
+﻿@model Blogcongnghe.Models.StoreContext
+@if (Model.Laythanhvien().EMAIL == null)
+{
+    Layout = "~/Views/Shared/_Layoutuser-trang.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layoutuser-" + Model.Laythanhvien().MAUNEN + ".cshtml";
+}
+<header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/Index/Index">Phoenix Blog<span>.</span></a></h1>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="/Index/Index">Trang chủ</a></li>
+                <li class="dropdown">
+                    <a href="#"><span>Thể Loại</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        @foreach (var theloai in Model.Laytheloai())
+                        {
+                            <li><a href="/TheloaiBaiviet/Index/?MATL=@theloai.MATL">@theloai.TENTL</a></li>
+                        }
+                    </ul>
+                </li>
+                <li><a class="nav-link scrollto" href="/ThongtinDoanhnghiep/Index">Giới thiệu</a></li>
+                @if (Model.Laythanhvien().EMAIL == null)
+                {
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Index">Đăng nhập</a></li>
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Dangki">Đăng kí</a></li>
+                }
+                else
+                {
+                    if (Model.Laythanhvien().QUYENDN == 1 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto" href="/Admin/IndexAdmin/Index?MATV=@Model.Laythanhvien().MATV">Chào Quản Trị Viên</a></li>
+                    }
+                    else if (Model.Laythanhvien().QUYENDN == 0 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto" href="/ThongtinThanhvien/Index">Chào @Model.Laythanhvien().TENTHANHVIEN</a></li>
+                    }
+                }
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+<main id="main">
+    @{
+        var item = Model.LaydulieuBaivietchitiet1;
+    }
+    <section class="breadcrumbs">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <ol>
+                    <li><a href="#">Trang chủ</a></li>
+                    <li><a href="#">@item.GetType().GetProperty("TENTL").GetValue(item, null)</a></li>
+                    <li>Bài Viết</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+    <section id="portfolio-details" class="portfolio-details">
+        <div class="container pt-10">
+            <div class="portfolio-details-slider swiper">
+                <div class="swiper-wrapper align-items-center">
+                    <div class="swiper-slide">
+                        <img src="~/img_post/@item.GetType().GetProperty("ANH1").GetValue(item, null)" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="~/img_post/@item.GetType().GetProperty("ANH2").GetValue(item, null)" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="~/img_post/@item.GetType().GetProperty("ANH3").GetValue(item, null)" alt="">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="portfolio-description">
+                <h2>@item.GetType().GetProperty("TIEUDE").GetValue(item, null)</h2>
+                @{
+                    string str = item.GetType().GetProperty("NOIDUNG").GetValue(item, null).ToString();
+                    string[] arrListStr = str.Split(";");
+                }
+                @for (int i = 0; i < arrListStr.Length; i++)
+                {
+                    if (arrListStr[i].Length <= 70)
+                    {
+                        <h3>@arrListStr[i]</h3>
+                    }
+                    else
+                    {
+                        <p>@arrListStr[i]</p>
+                    }
+                }
+            </div>
+            <div class="portfolio-info">
+                <h3>Thông Tin Bài Viết</h3>
+                <ul>
+                    <li><strong>Tác giả</strong>: <a href="/ChitietTacgia/Index?MATV=@item.GetType().GetProperty("MATV").GetValue(item, null)">@item.GetType().GetProperty("TENTHANHVIEN").GetValue(item, null)</a></li>
+                    <li><strong>Thể Loại</strong>: @item.GetType().GetProperty("TENTL").GetValue(item, null)</li>
+                    <li><strong>Ngày đăng</strong>: @item.GetType().GetProperty("NGAYDANG").GetValue(item, null)</li>
+                </ul>
+            </div>
+            @foreach (var item1 in Model.Laybinhluanchitiet1)
+            {
+                <div class="media border p-3">
+                    <div style="padding-left: 50px;">
+                        <img src="~/img_add/@item1.GetType().GetProperty("ANHDD").GetValue(item1, null)" alt="Không có" class="mr-3 mt-3 rounded-circle"
+                             style="width:45px;">
+                        <div class="media-body">
+                            <h4>@item1.GetType().GetProperty("TENTHANHVIEN").GetValue(item1, null) <small><i>Bình luận ngày: @item1.GetType().GetProperty("NGAYBINHLUAN").GetValue(item1, null)</i></small></h4>
+                            <p>@item1.GetType().GetProperty("NOIDUNG").GetValue(item1, null)</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="contact">
+                @if (Model.Laythanhvien().EMAIL == null)
+                {
+                    <form action="/ChitietBaiviet/XulyBinhluankhac" method="post" class="php-email-form">
+                        <div class="row">
+                            <div class="col form-group">
+                                <input type="hidden" name="MABAIDANG" class="form-control" value="@item.GetType().GetProperty("MABAIDANG").GetValue(item, null)">
+                                <input type="text" name="TENTHANHVIEN" class="form-control" id="name" placeholder="Tên" required>
+                            </div>
+                            <div class="col form-group">
+                                <input type="email" class="form-control" name="EMAIL" id="email" placeholder="Email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="NOIDUNG" rows="5" placeholder="Bình Luận" required></textarea>
+                        </div>
+                        <div class="my-3">
+                            <div class="loading">Đang Gửi...</div>
+                            <div class="error-message"></div>
+                            <div class="sent-message">Cảm ơn bạn. Tin nhắn bạn đã được gửi.</div>
+                        </div>
+                        <div class="text-center"><button type="submit">Đăng Bình Luận</button></div>
+                    </form>
+                }
+                else
+                {
+                    @if (Model.Layluotthich1 == "")
+                    {
+                        <a href="/ChitietBaiviet/Xulycongluotthich?MABAIDANG=@Model.LaydulieuBaivietchitiet1.GetType().GetProperty("MABAIDANG").GetValue(Model.LaydulieuBaivietchitiet1, null)" class="btn btn-primary"><i class="bi bi-hand-thumbs-up"></i> Like(@Model.LaydulieuBaivietchitiet1.GetType().GetProperty("SOLUOTTHICH").GetValue(Model.LaydulieuBaivietchitiet1, null))</a>
+                    }
+                    else
+                    {
+                        <a href="/ChitietBaiviet/Xulytruluotthich?MABAIDANG=@Model.LaydulieuBaivietchitiet1.GetType().GetProperty("MABAIDANG").GetValue(Model.LaydulieuBaivietchitiet1, null)" class="btn btn-success"><i class="bi bi-hand-thumbs-up"></i> Like(@Model.LaydulieuBaivietchitiet1.GetType().GetProperty("SOLUOTTHICH").GetValue(Model.LaydulieuBaivietchitiet1, null))</a>
+                    }
+                    <a href="View_post.html" class="btn btn-primary"><i class="bi bi-chat"></i> Comment(@Model.LaydulieuBaivietchitiet1.GetType().GetProperty("SOLUONGBINHLUAN").GetValue(Model.LaydulieuBaivietchitiet1, null))</a>
+                    <a type="button" href="http://www.facebook.com/sharer.php" class="btn btn-primary"><i class="bx bxl-facebook-square"></i> Share</a>
+                    <form action="~/ChitietBaiviet/XulyBinhLuan" method="post" class="php-email-form">
+                        <div class="form-group">
+                            <input type="hidden" name="MATV" class="form-control" value="@Model.Laythanhvien().MATV">
+                            <input type="hidden" name="MABAIDANG" class="form-control" value="@item.GetType().GetProperty("MABAIDANG").GetValue(item, null)">
+                            <textarea class="form-control" name="NOIDUNG" rows="5" placeholder="Bình Luận" required></textarea>
+                        </div>
+                        <div class="my-3">
+                            <div class="loading">Đang Gửi...</div>
+                            <div class="error-message"></div>
+                            <div class="sent-message">Cảm ơn bạn. Tin nhắn bạn đã được gửi.</div>
+                        </div>
+                        <div class="text-center"><button type="submit">Đăng Bình Luận</button></div>
+                    </form>
+                }
+            </div>
+        </div>
+    </section>
+</main>

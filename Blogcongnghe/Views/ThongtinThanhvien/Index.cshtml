@@ -1,0 +1,274 @@
+﻿@model Blogcongnghe.Models.StoreContext
+@if (Model.Laythanhvien().EMAIL == null)
+{
+    Layout = "~/Views/Shared/_Layoutuser-trang.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layoutuser-" + Model.Laythanhvien().MAUNEN + ".cshtml";
+}
+<header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/Index/Index">Phoenix Blog<span>.</span></a></h1>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="/Index/Index">Trang chủ</a></li>
+                <li class="dropdown">
+                    <a href="#"><span>Thể Loại</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        @foreach (var theloai in Model.Laytheloai())
+                        {
+                            <li><a href="/TheloaiBaiviet/Index/?MATL=@theloai.MATL">@theloai.TENTL</a></li>
+                        }
+                    </ul>
+                </li>
+                <li><a class="nav-link scrollto" href="/ThongtinDoanhnghiep/Index">Giới thiệu</a></li>
+                @if (Model.Laythanhvien().EMAIL == null)
+                {
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Index">Đăng nhập</a></li>
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Dangki">Đăng kí</a></li>
+                }
+                else
+                {
+                    if (Model.Laythanhvien().QUYENDN == 1 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto" href="/Admin/IndexAdmin/Index?MATV=@Model.Laythanhvien().MATV">Chào Quản Trị Viên</a></li>
+                    }
+                    else if (Model.Laythanhvien().QUYENDN == 0 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto active" href="/ThongtinThanhvien/Index">Chào @Model.Laythanhvien().TENTHANHVIEN</a></li>
+                    }
+                }
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+<main id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <aside id="sidebar" class="sidebar">
+                    <ul class="sidebar-nav" id="sidebar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/ThongtinThanhvien/Index">
+                                <i class="bi bi-person"></i>
+                                <span>Thông tin cá nhân</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="/ThongtinBaivietThanhvien/Index">
+                                <i class="bi bi-card-list"></i>
+                                <span>Bài viết hiện có</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="/ThongtinTaobaivietThanhvien/Index">
+                                <i class="bi bi-card-list"></i>
+                                <span>Tạo bài viết mới</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="/ThongtinBaivietThanhvien/Dangxuat">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                <span>Đăng xuất</span>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="col-lg-9">
+                <section class="section profile">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <div class="card">
+                                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                                    <img src="~/img_add/@Model.Laythanhvien().ANHDD" alt="Profile" class="rounded-circle">
+                                    <h2>@Model.Laythanhvien().TENTHANHVIEN</h2>
+                                    <div class="social-links mt-2">
+                                        <a href="@Model.Laythanhvien().TWITTER" class="twitter"><i class="bi bi-twitter"></i></a>
+                                        <a href="@Model.Laythanhvien().FACEBOOK" class="facebook"><i class="bi bi-facebook"></i></a>
+                                        <a href="@Model.Laythanhvien().INSTAGRAM" class="instagram"><i class="bi bi-instagram"></i></a>
+                                        <a href="@Model.Laythanhvien().LINKEDIN" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8" style="height: 1000px">
+                            <div class="card">
+                                <div class="card-body pt-3">
+                                    <ul class="nav nav-tabs nav-tabs-bordered">
+                                        <li class="nav-item">
+                                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Thông tin</button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Chỉnh sửa</button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change">Đổi nền</button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Thay đổi mật khẩu</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content pt-2">
+                                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                            <h5 class="card-title">Giới thiệu</h5>
+                                            <p class="small fst-italic">@Model.Laythanhvien().BIO</p>
+                                            <h5 class="card-title">Thông tin chi tiết</h5>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label ">Họ và tên</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().TENTHANHVIEN</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Địa chỉ</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().DIACHI</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Số điện thoại</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().SDT</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Twitter</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().TWITTER</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Facebook</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().FACEBOOK</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Instagram</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().INSTAGRAM</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Linkedin</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().LINKEDIN</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label">Email</div>
+                                                <div class="col-lg-9 col-md-8">@Model.Laythanhvien().EMAIL</div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                            <form action="/ThongtinThanhvien/Xulythanhvien" enctype="multipart/form-data" method="post">
+                                                <div class="row mb-3">
+                                                    <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Ảnh đại diện</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <img src="~/img_add/@Model.Laythanhvien().ANHDD" alt="Profile">
+                                                        <input name="ANHDD" type="hidden" value="@Model.Laythanhvien().ANHDD">
+                                                        <div class="pt-2">
+                                                            <input name="ANH" type="file" class="btn btn-primary btn-sm" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Họ và tên</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="TENTHANHVIEN" type="text" class="form-control" id="fullName" value="@Model.Laythanhvien().TENTHANHVIEN">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="about" class="col-md-4 col-lg-3 col-form-label">Giới thiệu</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <textarea name="BIO" class="form-control" id="about" style="height: 100px">@Model.Laythanhvien().BIO</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Địa chỉ</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="DIACHI" type="text" class="form-control" id="Address" value="@Model.Laythanhvien().DIACHI">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Số điện thoại</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="SDT" type="text" class="form-control" id="Phone" value="@Model.Laythanhvien().SDT">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="EMAIL" type="email" class="form-control" id="Email" value="@Model.Laythanhvien().EMAIL">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="ngaysinh" class="col-md-4 col-lg-3 col-form-label">Ngày sinh</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="NGAYSINH" type="datetime" class="form-control" id="ngaysinh" value="@Model.Laythanhvien().NGAYSINH">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="TWITTER" type="text" class="form-control" id="Twitter" value="@Model.Laythanhvien().TWITTER">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="FACEBOOK" type="text" class="form-control" id="Facebook" value="@Model.Laythanhvien().FACEBOOK">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="INSTAGRAM" type="text" class="form-control" id="Instagram" value="@Model.Laythanhvien().INSTAGRAM">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="LINKEDIN" type="text" class="form-control" id="Linkedin" value="@Model.Laythanhvien().LINKEDIN">
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane fade profile-edit pt-3" id="profile-change">
+                                            <form action="/ThongtinThanhvien/Xulydoinen" method="post">
+                                                <div class="row mb-3">
+                                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Chọn màu nền</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <select name="MAUNEN" class="form-control">
+                                                            <option value="trang">Màu trắng</option>
+                                                            <option value="xanh">Màu xanh</option>
+                                                            <option value="den">Màu đen</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="tab-pane fade pt-3" id="profile-change-password">
+                                            <form action="/ThongtinThanhvien/Xulythaydoimk" method="post">
+                                                <div class="row mb-3">
+                                                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mật khẩu hiện tại</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="mkcu" type="password" class="form-control" id="currentPassword">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Mật khẩu mới</label>
+                                                    <div class="col-md-8 col-lg-9">
+                                                        <input name="mkmoi" type="password" class="form-control" id="newPassword">
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>

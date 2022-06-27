@@ -1,0 +1,122 @@
+﻿@model Blogcongnghe.Models.StoreContext
+@if (Model.Laythanhvien().EMAIL == null)
+{
+    Layout = "~/Views/Shared/_Layoutuser-trang.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layoutuser-" + Model.Laythanhvien().MAUNEN + ".cshtml";
+}
+<header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/Index/Index">Phoenix Blog<span>.</span></a></h1>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto" href="/Index/Index">Trang chủ</a></li>
+                <li class="dropdown">
+                    <a href="#"><span>Thể Loại</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        @foreach (var theloai in Model.Laytheloai())
+                        {
+                            <li><a href="/TheloaiBaiviet/Index/?MATL=@theloai.MATL">@theloai.TENTL</a></li>
+                        }
+                    </ul>
+                </li>
+                <li><a class="nav-link scrollto" href="/ThongtinDoanhnghiep/Index">Giới thiệu</a></li>
+                @if (Model.Laythanhvien().EMAIL == null)
+                {
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Index">Đăng nhập</a></li>
+                    <li><a class="nav-link scrollto" href="/DangnhapDangki/Dangki">Đăng kí</a></li>
+                }
+                else
+                {
+                    if (Model.Laythanhvien().QUYENDN == 1 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto" href="/Admin/IndexAdmin/Index?MATV=@Model.Laythanhvien().MATV">Chào Quản Trị Viên</a></li>
+                    }
+                    else if (Model.Laythanhvien().QUYENDN == 0 && Model.Laythanhvien().TINHTRANGDN == 1)
+                    {
+                        <li><a class="nav-link scrollto active" href="/ThongtinThanhvien/Index">Chào @Model.Laythanhvien().TENTHANHVIEN</a></li>
+                    }
+                }
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+</header>
+<main id="main">
+    <div class="container">
+        <section class="section profile">
+            <div class="row">
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                            <img src="~/img_add/@Model.LaythongtinTacgia1.ANHDD" alt="Profile" class="rounded-circle">
+                            <h2>@Model.LaythongtinTacgia1.TENTHANHVIEN</h2>
+                            <div class="social-links mt-2">
+                                <a href="@Model.LaythongtinTacgia1.TWITTER" class="twitter"><i class="bi bi-twitter"></i></a>
+                                <a href="@Model.LaythongtinTacgia1.FACEBOOK" class="facebook"><i class="bi bi-facebook"></i></a>
+                                <a href="@Model.LaythongtinTacgia1.INSTAGRAM" class="instagram"><i class="bi bi-instagram"></i></a>
+                                <a href="@Model.LaythongtinTacgia1.LINKEDIN" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <ul class="nav nav-tabs nav-tabs-bordered">
+                                <li class="nav-item">
+                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Thông tin</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content pt-2">
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                    <h5 class="card-title">Giới thiệu</h5>
+                                    <p class="small fst-italic">@Model.LaythongtinTacgia1.BIO</p>
+                                    <h5 class="card-title">Thông tin chi tiết</h5>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label ">Họ và tên</div>
+                                        <div class="col-lg-9 col-md-8">@Model.LaythongtinTacgia1.TENTHANHVIEN</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Twitter</div>
+                                        <div class="col-lg-9 col-md-8">@Model.LaythongtinTacgia1.TWITTER</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Facebook</div>
+                                        <div class="col-lg-9 col-md-8">@Model.LaythongtinTacgia1.FACEBOOK</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Instagram</div>
+                                        <div class="col-lg-9 col-md-8">@Model.LaythongtinTacgia1.INSTAGRAM</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Linkedin</div>
+                                        <div class="col-lg-9 col-md-8">@Model.LaythongtinTacgia1.LINKEDIN</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="portfolio" class="portfolio">
+            <div class="container">
+                <div class="row portfolio-container">
+                    @foreach (var post in Model.LaybaivietTacgia1)
+                    {
+                        <div class="col-lg-4 col-md-6 portfolio-item filter-@post.MATL">
+                            <img src="~/img_post/@post.ANH1" class="img-fluid" alt="">
+                            <div class="portfolio-info">
+                                <h4>@post.TIEUDE</h4>
+                                <a href="/ChitietBaiviet/Index?MABAIDANG=@post.MABAIDANG" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
